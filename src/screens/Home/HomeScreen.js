@@ -10,13 +10,14 @@ const wait = (timeout) => {
 }
 
 function HomeScreen(props) {
+    const { navigation } = props;
     const [refreshing, setRefreshing] = useState(false);
     const [listData, setListData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [accessToken, setAccessToken] = useState('');
 
     useEffect(() => {
         getAllFilesList();
-        // else getAllMyAppFilesList();
     }, []);
 
     const onRefresh = useCallback(() => {
@@ -33,9 +34,9 @@ function HomeScreen(props) {
             return false;
         }
         else {
-            // console.log('res.accessToken =>', token.accessToken);
             // Setting Access Token
             GDrive.setAccessToken(token.accessToken);
+            setAccessToken(token.accessToken);
             // Initializing Google Drive and confirming permissions
             GDrive.init();
             // Check if Initialized
@@ -63,34 +64,21 @@ function HomeScreen(props) {
         setLoading(false);
     }
 
-    if (loading) {
-        return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <View style={styles.title}>
-                        <Image
-                            style={styles.logo}
-                            source={{ uri: 'http://dotshop69.000webhostapp.com/Public/images/chdlogo.png' }}
-                        />
-                    </View>
+    return (
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <View style={styles.title}>
+                    <Image
+                        style={styles.logo}
+                        source={{ uri: 'http://dotshop69.000webhostapp.com/Public/images/chdlogo.png' }}
+                    />
                 </View>
+            </View>
+            {loading ?
                 <View style={[styles.body, { justifyContent: 'center', alignItems: 'center' }]}>
                     <ActivityIndicator size="large" color="#0000ff" />
                 </View>
-            </View>
-        );
-    }
-    else {
-        return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <View style={styles.title}>
-                        <Image
-                            style={styles.logo}
-                            source={{ uri: 'http://dotshop69.000webhostapp.com/Public/images/chdlogo.png' }}
-                        />
-                    </View>
-                </View>
+                :
                 <FlatList
                     style={styles.body}
                     showsVerticalScrollIndicator={false}
@@ -102,13 +90,13 @@ function HomeScreen(props) {
                     }
                     data={listData}
                     renderItem={({ item }) => (
-                        <SheetItem item={item} />
+                        <SheetItem item={item} accessToken={accessToken} navigation={navigation} />
                     )}
                     keyExtractor={item => item.id}
                 />
-            </View>
-        );
-    }
+            }
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -124,11 +112,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         elevation: 7
     },
-    imageUser: {
-        borderRadius: 35 / 2,
-        width: 35,
-        height: 35
-    },
     title: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -143,10 +126,10 @@ const styles = StyleSheet.create({
         color: 'blue'
     },
     body: {
-        height: '93%',
+        height: '81%',
         marginHorizontal: 30,
-        paddingTop: 20,
-        marginBottom: 100
+        paddingTop: 20
     }
 });
+
 export default HomeScreen;

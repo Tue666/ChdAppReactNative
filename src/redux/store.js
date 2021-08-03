@@ -1,9 +1,6 @@
 import { createStore } from 'redux';
 
 const initState = {
-    menu: [
-        { id: 1, title: 'All files' }
-    ],
     userInfo: {}
 };
 

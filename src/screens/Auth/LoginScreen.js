@@ -42,7 +42,7 @@ function LoginScreen(props) {
             });
             const userInfo = await GoogleSignin.signIn();
             storeUserInfor(userInfo);
-            props.navigation.replace('HomeStack');
+            props.navigation.replace('MainTab');
         } catch (error) {
             console.log(error);
         }
@@ -55,7 +55,7 @@ function LoginScreen(props) {
             try {
                 let info = await GoogleSignin.signInSilently();
                 storeUserInfor(info);
-                props.navigation.replace('HomeStack');
+                props.navigation.replace('MainTab');
             } catch (error) {
                 console.log("Unable to get user's info", error);
             }
