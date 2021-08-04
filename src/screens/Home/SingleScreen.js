@@ -1,48 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, ActivityIndicator, Image, ScrollView, Picker } from 'react-native';
+import { Text, View, StyleSheet, ActivityIndicator, Image, ScrollView } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { Picker } from '@react-native-picker/picker';
 import { googleApi } from '../../Api/callApi';
+
+import StudentItem from '../../components/Home/StudentItem';
+import Message from '../../components/Home/Message';
 
 export default function SingleScreen(props) {
     const { item, accessToken } = props.route.params;
     const [loading, setLoading] = useState(false);
-    // const [dataSheet, setDataSheet] = useState([]);
+    const [dataSheet, setDataSheet] = useState([]);
+    const [selectedStudent, setSelectedStudent] = useState(1);
+    const [student, setStudent] = useState({});
 
-    // useEffect(() => {
-    //     const ranges = 'Sheet1!A2:H100';
-    //     const dateTimeRenderOption = 'FORMATTED_STRING';
-    //     const majorDimension = 'ROWS';
-    //     const valueRenderOption = 'FORMATTED_VALUE';
-    //     const dataSheetsUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + item.id + '/values/' + ranges + '?dateTimeRenderOption=' + dateTimeRenderOption + '&majorDimension=' + majorDimension + '&valueRenderOption=' + valueRenderOption;
-    //     googleApi(dataSheetsUrl, 'GET', accessToken)
-    //         .then(res => res.json())
-    //         .then(json => {
-    //             let listData = dataSheet;
-    //             json.values.map(item => {
-    //                 const singleObject = {
-    //                     STT: item[0],
-    //                     StudentName: item[1],
-    //                     StudentPhone: item[2],
-    //                     StudentEmail: item[3],
-    //                     ParentsPhone: item[4],
-    //                     ParentsEmail: item[5],
-    //                     Message: item[6],
-    //                     Note: item[7]
-    //                 };
-    //                 listData = [...listData, singleObject];
-    //             });
-    //             setDataSheet(listData);
-    //             setLoading(false);
-    //         });
-    // }, []);
-
-    // if (loading) {
-    //     return (
-    //         <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-    //             <ActivityIndicator size="large" color="#0000ff" />
-    //         </View>
-    //     );
-    // }
+    useEffect(() => {
+        const ranges = 'Sheet1!A2:H100';
+        const dateTimeRenderOption = 'FORMATTED_STRING';
+        const majorDimension = 'ROWS';
+        const valueRenderOption = 'FORMATTED_VALUE';
+        const dataSheetsUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + item.id + '/values/' + ranges + '?dateTimeRenderOption=' + dateTimeRenderOption + '&majorDimension=' + majorDimension + '&valueRenderOption=' + valueRenderOption;
+        googleApi(dataSheetsUrl, 'GET', accessToken)
+            .then(res => res.json())
+            .then(json => {
+                let listData = dataSheet;
+                json.values.map(item => {
+                    const singleObject = {
+                        STT: item[0],
+                        StudentName: item[1],
+                        StudentPhone: item[2],
+                        StudentEmail: item[3],
+                        ParentsPhone: item[4],
+                        ParentsEmail: item[5],
+                        Message: item[6],
+                        Note: item[7]
+                    };
+                    listData = [...listData, singleObject];
+                });
+                setDataSheet(listData);
+                setLoading(false);
+            });
+    }, []);
+    const getStudent = (selectedValue) => {
+        setSelectedStudent(selectedValue);
+        setStudent(dataSheet.filter(student => student.STT === selectedValue)[0]);
+    }
+    if (loading) {
+        return (
+            <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -67,57 +76,29 @@ export default function SingleScreen(props) {
                     <ScrollView
                         showsVerticalScrollIndicator={false}
                     >
-                        <View style={styles.infor}>
-                            <Text style={styles.titleInfor}>Họ và tên HS</Text>
+                        <View style={{ margin: 8 }}>
+                            <Text style={{ fontWeight: 'bold', paddingBottom: 4 }}>Họ và tên HS</Text>
                             <Picker
                                 style={{ height: 50, width: '100%' }}
+                                selectedValue={selectedStudent}
+                                onValueChange={value => getStudent(value)}
                             >
-                                <Picker.Item label="Lê Chính Tuệ" value="java" />
-                                <Picker.Item label="Lê Thị A" value="js" />
+                                {
+                                    dataSheet.map((item, index) => {
+                                        return (
+                                            <Picker.Item key={index} label={item.StudentName} value={item.STT} />
+                                        );
+                                    })
+                                }
                             </Picker>
                         </View>
-                        <View style={styles.infor}>
-                            <Text style={styles.titleInfor}>STT</Text>
-                            <View style={styles.field}>
-                                <Text style={styles.textField}>1</Text>
-                            </View>
-                        </View>
-                        <View style={styles.infor}>
-                            <Text style={styles.titleInfor}>Số điện thoại HS</Text>
-                            <View style={styles.field}>
-                                <Text style={styles.textField}>06969696969</Text>
-                            </View>
-                        </View>
-                        <View style={styles.infor}>
-                            <Text style={styles.titleInfor}>Email HS</Text>
-                            <View style={styles.field}>
-                                <Text style={styles.textField}>lechinhtue292001@gmail.com</Text>
-                            </View>
-                        </View>
-                        <View style={styles.infor}>
-                            <Text style={styles.titleInfor}>Số điện thoại PH</Text>
-                            <View style={styles.field}>
-                                <Text style={styles.textField}>06969696969</Text>
-                            </View>
-                        </View>
-                        <View style={styles.infor}>
-                            <Text style={styles.titleInfor}>Email PH</Text>
-                            <View style={styles.field}>
-                                <Text style={styles.textField}>phuhuynh123@gmail.com</Text>
-                            </View>
-                        </View>
-                        <View style={styles.infor}>
-                            <Text style={styles.titleInfor}>Tin nhắn</Text>
-                            <View style={styles.field}>
-                                <Text style={styles.textField}>Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn Đây là tin nhắn</Text>
-                            </View>
-                        </View>
-                        <View style={styles.infor}>
-                            <Text style={styles.titleInfor}>Ghi chú</Text>
-                            <View style={styles.field}>
-                                <Text style={styles.textField}>Đây là ghi chú</Text>
-                            </View>
-                        </View>
+                        <StudentItem type='STT' student={student} />
+                        <StudentItem type='StudentPhone' student={student} />
+                        <StudentItem type='StudentEmail' student={student} />
+                        <StudentItem type='ParentsPhone' student={student} />
+                        <StudentItem type='ParentsEmail' student={student} />
+                        <Message student={student} item={item} accessToken={accessToken} />
+                        <StudentItem type='Note' student={student} />
                     </ScrollView>
                 </View>
             }
@@ -165,20 +146,5 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         fontSize: 17,
         fontWeight: 'bold'
-    },
-    infor: {
-        margin: 8
-    },
-    titleInfor: {
-        fontWeight: 'bold',
-        paddingBottom: 4
-    },
-    field: {
-        backgroundColor: '#fff',
-        padding: 13,
-        elevation: 3
-    },
-    textField: {
-        fontSize: 15
     }
 });

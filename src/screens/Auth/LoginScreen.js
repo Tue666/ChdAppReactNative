@@ -13,13 +13,14 @@ function LoginScreen(props) {
         GoogleSignin.configure({
             scopes: [
                 'https://www.googleapis.com/auth/drive',
-                // 'https://www.googleapis.com/auth/drive.file',
+                'https://www.googleapis.com/auth/drive.file',
+                'https://www.googleapis.com/auth/spreadsheets',
                 // 'https://www.googleapis.com/auth/drive.appdata',
                 // 'https://www.googleapis.com/auth/drive.metadata',
                 // 'https://www.googleapis.com/auth/drive.readonly',
                 // 'https://www.googleapis.com/auth/drive.metadata.readonly',
                 // 'https://www.googleapis.com/auth/drive.apps.readonly',
-                // 'https://www.googleapis.com/auth/drive.photos.readonly',
+                // 'https://www.googleapis.com/auth/drive.photos.readonly'
             ],
             webClientId: '534472500462-df8aihedbs5f0t18hle5pq5s6kacc93g.apps.googleusercontent.com'
         });

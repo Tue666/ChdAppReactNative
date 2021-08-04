@@ -50,12 +50,22 @@ function HomeScreen(props) {
                 Alert.alert('Oops!', 'Failed to Initialize Google Drive', [{ text: 'OK' }]);
             }
             else {
-                let data = await GDrive.files.list({
-                    // mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' for exactly excel file
-                    q: "'1M2a9PgRyC7MW5ZdyXLlTuvKQiGDMV1po' in parents",
-                });
-                let result = await data.json();
-                setListData(result.files);
+                let folderRootName = "ChdApp";
+                let folders = await GDrive.files.list({
+                    q: "mimeType='application/vnd.google-apps.folder' and trashed=false"
+                }).catch(error => console.log(error));
+                let foldersJson = await folders.json();
+                let folderRoot = foldersJson.files.filter(x => x.name === folderRootName);
+                var folderRootId = folderRoot.length ? folderRoot[0].id : 0;
+
+                if (folderRootId) {
+                    let files = await GDrive.files.list({
+                        q: "'" + folderRootId + "' in parents and trashed=false and mimeType='application/vnd.google-apps.spreadsheet'"
+                    }).catch(error => console.log(error));
+                    let filesJson = await files.json();
+                    setListData(filesJson.files);
+                }
+                else Alert.alert('Oops!', 'Không tìm thấy folder tên ChdApp', [{ text: 'OK' }]);
             }
 
         } catch (error) {

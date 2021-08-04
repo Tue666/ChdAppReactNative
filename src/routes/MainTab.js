@@ -5,7 +5,7 @@ import { CustomTabItem, CustomMiddleItem } from '../shared/CustomBottomTab';
 
 import HomeStack from './HomeStack';
 
-import ListFilesScreen from '../screens/Home/ListFilesScreen';
+import UserManualScreen from '../screens/Home/UserManualScreen';
 import UploadScreen from '../screens/Home/UploadScreen'
 import AccountScreen from '../screens/Home/AccountScreen';
 import SettingScreen from '../screens/Home/SettingScreen';
@@ -36,10 +36,10 @@ export default function MainTab() {
                 }}
             />
             <Tab.Screen
-                name="ListFilesScreen"
-                component={ListFilesScreen}
+                name="UserManualScreen"
+                component={UserManualScreen}
                 options={{
-                    tabBarIcon: props => <CustomTabItem {...props} icon="search" />
+                    tabBarIcon: props => <CustomTabItem {...props} icon="book" />
                 }}
             />
             <Tab.Screen
