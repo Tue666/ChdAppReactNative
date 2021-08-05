@@ -14,13 +14,14 @@ export default function UserManualScreen() {
             </View>
             <View style={styles.body}>
                 <Text style={[styles.text, { fontSize: 25, marginVertical: 10, fontWeight: 'bold' }]}>Hướng dẫn sử dụng</Text>
-                <Text style={[styles.text, { color: 'red' }]}>1) Files sheet phải được lưu dưới dạng Spreadsheet!</Text>
+                <Text style={[styles.text, { color: 'red' }]}>1) Đảm bảo mọi file sheets đều nằm trong folder tên 'ChdApp' </Text>
+                <Text style={[styles.text, { color: 'red' }]}>2) Files sheet phải được lưu dưới dạng Spreadsheet!</Text>
                 <Text style={styles.text}>Các bước thực hiện:</Text>
                 <Text style={styles.text}>- Mở files (<Text style={styles.hightlight}>Chuột phải</Text> - <Text style={styles.hightlight}>Open with Google Sheets</Text>)</Text>
                 <Text style={styles.text}>- Lưu dưới dạng Google Sheets (<Text style={styles.hightlight}>File</Text> - <Text style={styles.hightlight}>Save as Google Sheets</Text>)</Text>
                 <Text style={styles.text}>- Xóa Sheets cũ nếu cần thiết (<Text style={styles.hightlight}>Chuột phải</Text> - <Text style={styles.hightlight}>Remove</Text>)</Text>
                 <Text style={styles.text}>- Vào Trash để xóa vĩnh viễn nếu cần thiết</Text>
-                <Text style={[styles.text, { color: 'red' }]}>2) Dữ liệu các cột phải theo đúng thứ tự sau:</Text>
+                <Text style={[styles.text, { color: 'red' }]}>3) Dữ liệu các cột phải theo đúng thứ tự sau:</Text>
                 <Text style={styles.text}>
                     <Text style={styles.hightlight}>STT - </Text>
                     <Text style={styles.hightlight}>Họ tên HS - </Text>

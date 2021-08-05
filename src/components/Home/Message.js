@@ -9,22 +9,20 @@ export default function Message(props) {
     const [editing, setEditing] = useState(false);
     const [message, setMessage] = useState('');
     const [studentSTT, setStudentSTT] = useState();
-    const [parentsEmail, setParentsEmail] = useState();
 
     useEffect(() => {
         setMessage(student.Message);
         setStudentSTT(student.STT);
-        setParentEmail(student.ParentsEmail);
-    }, [student.Message, student.STT, student.ParentsEmail]);
+    }, [student.Message, student.STT]);
 
-    const sendMail = async (to, subject, body) => {
-        let url = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
-        const supported = await Linking.canOpenURL(url);
-        if (!supported) {
-            throw new Error('Provided URL can not be handled');
-        }
-        return Linking.openURL(url);
-    }
+    // const sendMail = async (to, subject, body) => {
+    //     let url = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
+    //     const supported = await Linking.canOpenURL(url);
+    //     if (!supported) {
+    //         throw new Error('Provided URL can not be handled');
+    //     }
+    //     return Linking.openURL(url);
+    // }
 
     const updateSheet = () => {
         const range = 'G' + (parseInt(studentSTT) + 1);
@@ -37,14 +35,25 @@ export default function Message(props) {
                 ]
             ]
         };
-        googleApi(updateSheetUrl, 'PUT', accessToken, body)
-            .then(res => res.json())
-            .then(json => console.log(json));
+        return googleApi(updateSheetUrl, 'PUT', accessToken, body);
     }
 
     const onClickSubmit = () => {
-        sendMail(parentsEmail, 'Tiêu đề', message)
-            .then(() => updateSheet());
+        Alert.alert('Cập nhật', 'Nhấn \'ĐỒNG Ý\' để cập nhật tin nhắn trên Google Drive', [
+            {
+                text: 'ĐỒNG Ý', onPress: async () => {
+                    const isUpdated = await updateSheet();
+                    if (isUpdated.status === 200) {
+                        Alert.alert('Thành công', 'Cập nhật tin nhắn thành công', [{ text: 'OK' }]);
+                    }
+                    else {
+                        Alert.alert('Thất bại', 'Đã xảy ra sự cố, liên hệ hỗ trợ!', [{ text: 'OK' }]);
+                    }
+                    setEditing(false);
+                }
+            },
+            { text: 'HỦY' }
+        ]);
     }
 
     return (

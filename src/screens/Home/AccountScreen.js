@@ -29,7 +29,7 @@ function AccountScreen(props) {
                 }
             ]} />
 
-            <View style={[styles.wrapper, { height: 280 }]}>
+            <View style={[styles.wrapper, { height: 310 }]}>
                 <Image
                     style={styles.image}
                     source={{ uri: userInfo.user.photo }}
